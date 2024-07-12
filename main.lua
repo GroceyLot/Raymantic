@@ -2,6 +2,34 @@ function love.load()
     targetPitch = 0
     targetYaw = 0
     scene = require("raymantic")()
+    scene.sdfs[1] = [[
+sdfInfo sdf(vec3 point) {
+    sdfInfo info;
+    vec3 p = point;
+    vec3 spherePos = vec3(0.0, 0.0, 0.0);
+
+    // Calculate the position modulo the repeating pattern size
+    vec3 modPos = mod(p, vec3(5.0));
+    float sphereDist = sdfSphere(modPos - vec3(2.5), spherePos, 1.0);
+
+    // Determine the "unmodded" center of the sphere
+    vec3 sphereCenter = floor(p / 5.0) * 5.0 + vec3(2.5);
+
+    // Set the sdfInfo
+    info.dist = sphereDist;
+    info.material.color = vec3(1.0);
+
+    // Determine if the indices for x, y, and z axes are even or odd
+    bool isEvenX = mod(floor(p.x / 5.0), 2.0) < 1.0;
+    bool isEvenY = mod(floor(p.y / 5.0), 2.0) < 1.0;
+    bool isEvenZ = mod(floor(p.z / 5.0), 2.0) < 1.0;
+
+    // Make the sphere reflective if all indices are even or all are odd
+    info.material.reflective = (isEvenX == isEvenY) && (isEvenY == isEvenZ);
+
+    return info;
+}
+    ]]
     scene:compileShaders()
     wspeed = 5
 end
