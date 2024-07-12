@@ -1,6 +1,6 @@
 # Starting guide
 
-### If you don't know love2d and glsl at all, go away and come back when you've learnt it! This is complex stuff, and if you are not familiar with the engine you should just use a rasterizer.
+### If you don't know love2d and glsl at all, go away and come back when you've learnt it! This is complex stuff, and if you are not familiar with glsl you should just use a simpler engine.
 
 - Create a love2d project, and put LICENSE, raymantic.lua, globals.glsl, shader.glsl, and structs.glsl into its folder. You might want this file as well, but you can just view it on github.
 - **License is legally required**
