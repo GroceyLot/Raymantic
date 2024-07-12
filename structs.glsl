@@ -20,6 +20,6 @@ struct hitInfo {
 uniform float time;
 uniform vec2 screenResolution;
 uniform bool debug;
+uniform vec3 lightDirection;
 
 const float PI = 3.14159265359;
-
