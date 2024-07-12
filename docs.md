@@ -1,3 +1,8 @@
+# Starting guide
+
+- Create a love2d project, and put LICENSE, raymantic.lua, globals.glsl, shader.glsl, and structs.glsl into its folder. You might want this file as well, but you can just view it on github.
+- In ```love.load()``` create a scene using the following line: ```scene = require("raymantic")()```
+
 # GLSL
 
 ## Values + Functions
