@@ -1,4 +1,4 @@
-uniform vec2 fogInfo;
+uniform ivec2 fogInfo;
 uniform bool enableFog;
 uniform bool enableCelShading;
 uniform bool enableGoochShading;
@@ -8,7 +8,7 @@ uniform vec3 cameraPosition;
 uniform int numMarches;
 uniform mat3 rotationMatrix;
 uniform int reflectionLimit;
-uniform vec3 lightDirection;
+uniform int fov;
 
 const float EPSILON = 0.0001;
 
@@ -80,21 +80,21 @@ vec3 applyFog(vec3 color, vec3 skyColor, float fullDist, float fogStart, float f
 }
 
 float goochShading(vec3 normal, vec3 surfaceColor) {
-    float NdotL = dot(normal, lightDirection);
+    float NdotL = dot(normal, normalize(lightDirection));
     float goochAmount = mix(goochCoolAmount, 1.0, (NdotL + 1.0) * 0.5);
 
     return goochAmount;
 }
 
 vec4 effect(vec4 color, Image texture, vec2 uv, vec2 screenCoords) {
-    float fov = radians(70.0);
+    float rfov = radians(float(fov));
     float aspectRatio = screenResolution.x / screenResolution.y;
-    float scale = tan(fov * 0.5);
+    float scale = tan(rfov * 0.5);
 
     vec2 normalizedCoords = ((screenCoords / screenResolution) * 2.0 - 1.0) * vec2(aspectRatio, 1.0) * scale;
     vec3 rayOrigin = cameraPosition;
     vec3 rayDirection = normalize(vec3(normalizedCoords, -1.0));
-    rayDirection = rotationMatrix * rayDirection;
+    rayDirection = normalize(rotationMatrix * rayDirection);
 
     vec3 skyColor = sky(rayDirection);
 
@@ -105,11 +105,6 @@ vec4 effect(vec4 color, Image texture, vec2 uv, vec2 screenCoords) {
 
     for (int reflectionCount = 0; reflectionCount <= reflectionLimit; reflectionCount++) {
         hitInfo info = rayMarching(currentRayOrigin, currentRayDirection); 
-        if (debug) {
-            vec3 intersectionPoint = currentRayOrigin + currentRayDirection * info.fullDist;
-            vec3 normal = calculateNormal(intersectionPoint);
-            return vec4(normal, 1.0);
-        }
 
         if (!info.hit) {
             finalColor += currentColor * sky(currentRayDirection);
@@ -131,7 +126,7 @@ vec4 effect(vec4 color, Image texture, vec2 uv, vec2 screenCoords) {
         }
 
         if (enableFog) {
-            shadedColor = applyFog(shadedColor, skyColor, info.fullDist, fogInfo.x, fogInfo.y);
+            shadedColor = applyFog(shadedColor, skyColor, info.fullDist, float(fogInfo.x), float(fogInfo.y));
         }
         
         if (info.material.reflective) {
@@ -149,5 +144,5 @@ vec4 effect(vec4 color, Image texture, vec2 uv, vec2 screenCoords) {
         finalColor = clamp(finalColor, 0.0, 1.0);
     }
     
-    return vec4(finalColor.rgb, clamp(time, 1.0, 1.0));
+    return vec4(finalColor.rgb, debug ? clamp(time, 1.0, 1.0) : 1.0);
 }
