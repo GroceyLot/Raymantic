@@ -1,3 +1,3 @@
 # Raymantic
 
-Look in docs.md
+### Look in main.lua for an example and docs.md for documentation.
