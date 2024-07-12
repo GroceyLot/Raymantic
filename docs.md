@@ -62,3 +62,38 @@ struct hitInfo {
     basicMaterial material;
 };
 ```
+
+# Lua
+
+```
+scene - object
+    .camera - object
+        .pos - array //[x, y, z]
+        .yaw - float //Degrees
+        .pitch - float //Also degrees
+        .fov - int //More degrees
+    .rendering - object
+        .quality - object
+            .marches - int
+            .bounces - int
+        .fog - object
+            .start - int
+            .end - int
+            .enabled - bool
+        .gooch - object
+            .enabled - bool
+            .coolAmount - float //CoolColor = SurfaceColor * CoolAmount
+            .lightDirection - array //[x, y, z]
+        .ambient - object
+            .enabled - bool
+            .amount - float
+    .debug - bool //Passed to the sdf
+    .sdfs - array<string> //Look in main.lua for an example
+    .sdf - int //Which sdf to use
+    .sky - string //Only change if you want to have day and night, look in raymantic.lua for an example
+    .shader - void | shader //The love shader object created on compileShaders() or nil
+    :compileShaders() - void //Compiles the shader, run at the start, and when changing sdfs
+    :startRender() - object
+        .sendSdf(uniform - string, value - ...) - ? //Returns whatever shader:send() returns
+        .render() - void //Finishes and renders to the screen
+```
