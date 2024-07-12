@@ -1,4 +1,6 @@
-# Values + Functions
+# GLSL
+
+## Values + Functions
 
 ```float sdfSphere(vec3 p, vec3 center, float radius)``` - Computes the signed distance from point p to a sphere with specified center and radius.
 
@@ -38,7 +40,7 @@
 
 ```bool debug``` - scene.debug from lua.
 
-# Structs
+## Structs
 
 ```
 struct basicMaterial {
