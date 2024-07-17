@@ -56,7 +56,7 @@ hitInfo rayMarching(vec3 rayOrigin, vec3 rayDirection) {
         info.avgDist += dist;
         info.avgDist *= 0.5;
 
-        if (distTraveled > fogInfo.y) {
+        if (distTraveled > float(fogInfo.y)) {
             break;
         }
     }
@@ -121,7 +121,7 @@ vec4 effect(vec4 color, Image texture, vec2 uv, vec2 screenCoords) {
             
         if (enableCelShading) {
             float factor = float(numMarches) * 0.01 * shading;
-            float celShading = easeInSine(clamp(1.0 - (float(info.numIterations) / numMarches), 0.0, 1.0), factor);
+            float celShading = easeInSine(clamp(1.0 - (float(info.numIterations) / float(numMarches)), 0.0, 1.0), factor);
             shadedColor *= vec3(celShading);
         }
 
